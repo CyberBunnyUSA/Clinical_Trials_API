@@ -1,0 +1,19 @@
+import requests
+
+BASE_URL = "https://clinicaltrials.gov/api/query/study_fields"
+
+def fetch_trials(condition: str = "cancer", status: str = "Recruiting", fields=None, max_studies=100):
+    if fields is None:
+        fields = ["NCTId", "Condition", "Phase", "BriefTitle", "LocationCity", "StartDate", "StudyType"]
+    
+    params = {
+        "expr": f"{condition} AND {status}",
+        "fields": ",".join(fields),
+        "min_rnk": 1,
+        "max_rnk": max_studies,
+        "fmt": "json"
+    }
+    
+    response = requests.get(BASE_URL, params=params)
+    data = response.json()
+    return data["StudyFieldsResponse"]["StudyFields"]
