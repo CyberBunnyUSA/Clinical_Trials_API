@@ -1,0 +1,10 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans
+
+def cluster_trials(df, text_field="BriefTitle", n_clusters=5):
+    tfidf = TfidfVectorizer(stop_words="english")
+    X = tfidf.fit_transform(df[text_field].fillna(""))
+    model = KMeans(n_clusters=n_clusters, random_state=42)
+    labels = model.fit_predict(X)
+    df["Cluster"] = labels
+    return df
