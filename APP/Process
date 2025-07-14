@@ -1,0 +1,10 @@
+import pandas as pd
+
+def clean_data(raw_data):
+    df = pd.DataFrame(raw_data)
+    df = df.applymap(lambda x: x[0] if isinstance(x, list) and x else x)
+    df.dropna(subset=["Phase", "Condition"], inplace=True)
+    return df
+
+def get_distribution(df, column):
+    return df[column].value_counts().to_dict()
