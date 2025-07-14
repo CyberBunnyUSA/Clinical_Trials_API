@@ -1,0 +1,20 @@
+import dash
+from dash import html, dcc
+import plotly.express as px
+import pandas as pd
+from fetch import fetch_trials
+from process import clean_data
+
+raw_data = fetch_trials("diabetes")
+df = clean_data(raw_data)
+
+app = dash.Dash(__name__)
+fig = px.bar(df, x="Phase", title="Distribution of Trial Phases")
+
+app.layout = html.Div([
+    html.H1("Clinical Trials Dashboard"),
+    dcc.Graph(figure=fig)
+])
+
+if __name__ == "__main__":
+    app.run_server(debug=True)
